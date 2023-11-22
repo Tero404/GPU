@@ -12,6 +12,11 @@ WIDTH = 500
 HEIGHT = 700
 GRAPH_HEIGHT = 200
 MAX_SPEED = 1 # maximum speed at a direction of x or y
+
+'''
+Warning high speeds or a small grid can lead to visual bugs
+'''
+
 FIREFLYS = 150 #number of fireflies
 
 max_energy = 500 #energy at with the firefly glows
