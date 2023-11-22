@@ -60,8 +60,8 @@ def get_distances(position):
     y_pos = position.T[1]
     
     
-    x_dist = x_pos.unsqueeze(0) - x_pos.unsqueeze(1)
-    y_dist = y_pos.unsqueeze(0) - y_pos.unsqueeze(1)
+    x_dist = torch.abs(x_pos.unsqueeze(0) - x_pos.unsqueeze(1))
+    y_dist = torch.abs(y_pos.unsqueeze(0) - y_pos.unsqueeze(1))
     
     x_dist = torch.minimum(x_dist, WIDTH - x_dist)
     y_dist = torch.minimum(y_dist, WIDTH - GRAPH_HEIGHT - y_dist)
