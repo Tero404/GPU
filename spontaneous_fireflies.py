@@ -11,8 +11,8 @@ pygame.init()
 WIDTH = 500
 HEIGHT = 700
 GRAPH_HEIGHT = 200
-MAX_SPEED = 3 # maximum speed at a direction of x or y
-FIREFLYS = 250 #number of fireflies
+MAX_SPEED = 1 # maximum speed at a direction of x or y
+FIREFLYS = 150 #number of fireflies
 
 max_energy = 500 #energy at with the firefly glows
 overload = 20 #engerylevel above max energy, at that level glowing stops and resets
@@ -31,10 +31,8 @@ graph_scale = GRAPH_HEIGHT / (max_energy+overload)
 def get_staring_values(width, height, max_speed, particles):
     coords_x = torch.randint(low=0, high=width, size=(particles,)).to(device)
     coords_y = torch.randint(low=0, high=height, size=(particles,)).to(device)
-    coords = torch.stack((coords_x, coords_y), dim=1)
-    speed = torch.randint(low=(-max_speed), high=max_speed,
-                          size=(particles, 2)).to(device)
-
+    coords = torch.stack((coords_x, coords_y), dim=1).float()
+    speed = (torch.randn((particles, 2)).to(device) - 0.5) * max_speed * 2
     charge = torch.randint(low=0, high=(max_energy+1),
                            size=(particles,)).to(device).float()
     return coords, speed, charge
@@ -60,6 +58,8 @@ def get_distances(position):
     x_dist = x_pos.unsqueeze(0) - x_pos.unsqueeze(1)
     y_dist = y_pos.unsqueeze(0) - y_pos.unsqueeze(1)
     
+    x_dist = torch.minimum(x_dist, WIDTH - x_dist)
+    y_dist = torch.minimum(y_dist, WIDTH - GRAPH_HEIGHT - y_dist)
 
     dist = torch.sqrt(x_dist**2 + y_dist**2)
     
